@@ -1,0 +1,20 @@
+public class LoadedDie extends Die {
+
+    // no public constructor so this is needed
+
+    public LoadedDie(int sides) {
+        super(sides);
+    }
+
+    public int roll() {
+        // ~33% chance of loaded effect
+        if (Math.random() > .66) {
+            // will be a very high number, at the same time don't want it to always land on one side as that is very suspicious
+            return (this.n - (int) (Math.random() * this.n/4));
+        }
+        else {
+            int number = (int) (Math.random() * this.n) + 1;
+            return number;
+        }
+    }
+}
