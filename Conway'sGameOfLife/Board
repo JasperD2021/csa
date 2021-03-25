@@ -1,0 +1,198 @@
+public class Board {
+    private Tile[][] board;
+
+    public Board(Seed seed) {
+        board = new Tile[50][50];
+
+        for (int i = 0; i < 50; i++) {
+            for (int j = 0; j < 50; j++) {
+                board[i][j] = new Tile(false);
+            }
+        }
+
+        switch (seed) {
+            case Block:
+                board[25][25].setState(true);
+                board[25][25 + 1].setState(true);
+                board[25 - 1][25].setState(true);
+                board[25 - 1][25 + 1].setState(true);
+                break;
+            case Bee_hive:
+                board[25][25 - 1].setState(true);
+                board[25][25 + 1].setState(true);
+                board[25 - 1][25 - 1].setState(true);
+                board[25 - 1][25 + 1].setState(true);
+                board[25 - 2][25].setState(true);
+                board[25 + 1][25].setState(true);
+                break;
+            case Loaf:
+                board[25+1][25].setState(true);
+                board[25+1][25+1].setState(true);
+                board[25][25+2].setState(true);
+                board[25-1][25+2].setState(true);
+                board[25-1][25].setState(true);
+                board[25-2][25+1].setState(true);
+                board[25][25-1].setState(true);
+                break;
+            case Boat:
+                board[25][25].setState(true);
+                board[25-1][25+2].setState(true);
+                board[25][25+1].setState(true);
+                board[25-1][25].setState(true);
+                board[25-2][25+1].setState(true);
+                break;
+            case Tub:
+                board[25+1][25].setState(true);
+                board[25][25+1].setState(true);
+                board[25-1][25].setState(true);
+                board[25][25-1].setState(true);
+                break;
+            case Blinker:
+                board[25][25].setState(true);
+                board[25][25 + 1].setState(true);
+                board[25][25 - 1].setState(true);
+                break;
+            case Toad:
+                board[25+1][25].setState(true);
+                board[25+2][25].setState(true);
+                board[25+1][25-1].setState(true);
+                board[25][25].setState(true);
+                board[25][25-1].setState(true);
+                board[25-1][25-1].setState(true);
+                break;
+            case Beacon:
+                board[25][25].setState(true);
+                board[25-1][25].setState(true);
+                board[25][25+1].setState(true);
+                board[25-1][25+1].setState(true);
+                board[25+1][25-1].setState(true);
+                board[25+1][25-2].setState(true);
+                board[25+2][25-1].setState(true);
+                board[25+2][25-2].setState(true);
+                break;
+            case Glider:
+                board[25][25].setState(true);
+                board[25][25 + 1].setState(true);
+                board[25][25 - 1].setState(true);
+                board[25 - 1][25 + 1].setState(true);
+                board[25 - 2][25].setState(true);
+                break;
+            case GliderGun:
+                board[25+1][25-18].setState(true);
+                board[25+1][25-17].setState(true);
+                board[25][25-18].setState(true);
+                board[25][25-17].setState(true);
+                board[25+1][25-8].setState(true);
+                board[25][25-8].setState(true);
+                board[25-1][25-8].setState(true);
+                board[25+2][25-7].setState(true);
+                board[25-2][25-7].setState(true);
+                board[25+3][25-6].setState(true);
+                board[25-3][25-6].setState(true);
+                board[25+3][25-5].setState(true);
+                board[25-3][25-5].setState(true);
+                board[25][25-3].setState(true);
+                board[25+2][25-2].setState(true);
+                board[25-2][25-2].setState(true);
+                board[25+1][25-1].setState(true);
+                board[25][25-1].setState(true);
+                board[25-1][25-1].setState(true);
+                board[25][25].setState(true);
+                board[25+1][25+3].setState(true);
+                board[25+2][25+3].setState(true);
+                board[25+3][25+3].setState(true);
+                board[25+1][25+4].setState(true);
+                board[25+2][25+4].setState(true);
+                board[25+3][25+4].setState(true);
+                board[25+4][25+5].setState(true);
+                board[25][25+5].setState(true);
+                board[25+4][25+7].setState(true);
+                board[25+5][25+7].setState(true);
+                board[25][25+7].setState(true);
+                board[25-1][25+7].setState(true);
+                board[25+2][25+17].setState(true);
+                board[25+3][25+17].setState(true);
+                board[25+2][25+18].setState(true);
+                board[25+3][25+18].setState(true);
+                break;
+
+            case Random:
+                double maxDist = getDistance(24.5, 24.5, 50, 50);
+                for (int i = 0; i < 50; i++) {
+                    for (int j = 0; j < 50; j++) {
+                        double rand = Math.random() * maxDist;
+                        double probability = maxDist / (getDistance(24.5, 24.5, j, i) + 0.75);
+                        if (rand < probability) {
+                            board[i][j].setState(true);
+                        }
+                    }
+                }
+                break;
+        }
+    }
+
+    public int getHeight() { return board.length; }
+
+    public int getWidth() { return board.length; }
+
+    private double getDistance(double fromx, double fromy, double tox, double toy) {
+        return Math.sqrt(Math.pow(fromx - tox, 2) + Math.pow(fromy - toy, 2));
+    }
+
+    public Tile getTile(int row, int col) {
+        if ((row < 0 || row >= getWidth()) || (col < 0 || col >= getHeight())) {
+            return null;
+        }
+        else {
+            return board[row][col];
+        }
+    }
+
+    public void displayBoard() {
+        for (Tile[] row : board) {
+            for (Tile cell : row) {
+                if (cell.getState()) {
+                    System.out.print("X");
+                } else {
+                    System.out.print("_");
+                }
+            }
+            System.out.println();
+        }
+    }
+
+    public boolean isLivingNeighbor(int row, int col) {
+        return getTile(row, col) != null && getTile(row, col).getState();
+    }
+
+    public int getNeighbors(int row, int col) {
+        int counter = 0;
+
+        if (isLivingNeighbor(row, col-1)) {
+            counter ++;
+        }
+        if (isLivingNeighbor(row, col + 1)) {
+            counter++;
+        }
+        if (isLivingNeighbor(row - 1, col)) {
+            counter++;
+        }
+        if (isLivingNeighbor(row + 1, col)) {
+            counter++;
+        }
+        if (isLivingNeighbor(row - 1, col - 1)) {
+            counter++;
+        }
+        if (isLivingNeighbor(row - 1, col + 1)) {
+            counter++;
+        }
+        if (isLivingNeighbor(row + 1, col - 1)) {
+            counter++;
+        }
+        if (isLivingNeighbor(row + 1, col + 1)) {
+            counter++;
+        }
+        return counter;
+    }
+
+}
